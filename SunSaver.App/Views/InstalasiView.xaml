@@ -1,0 +1,193 @@
+<UserControl x:Class="SunSaver.App.Views.InstalasiView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="JudulSeksi" TargetType="TextBlock" BasedOn="{StaticResource JudulKartu}">
+            <Setter Property="Margin" Value="0,0,0,14"/>
+        </Style>
+        <Style x:Key="LabelField" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource Teks}"/>
+        </Style>
+        <Style x:Key="PesanGalat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{StaticResource Galat}"/>
+            <Setter Property="Margin" Value="0,4,0,0"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
+        <Style x:Key="InputAngka" TargetType="TextBox" BasedOn="{StaticResource InputTeks}">
+            <Setter Property="FontFamily" Value="{StaticResource FontAngka}"/>
+        </Style>
+        <Style x:Key="Satuan" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{StaticResource TeksRedup}"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="8,4,0,0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="32,28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="24"/>
+            <ColumnDefinition Width="340"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.ColumnSpan="3" Margin="0,0,0,20">
+            <TextBlock Text="Instalasi Saya" Style="{StaticResource JudulHalaman}"/>
+            <TextBlock Text="Isi data rencana pemasangan panel surya untuk menghitung estimasi produksinya."
+                       Style="{StaticResource LabelKecil}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- ============ KOLOM KIRI: FORM ============ -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Lokasi -->
+                <Border Style="{StaticResource GayaKartu}" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="Lokasi" Style="{StaticResource JudulSeksi}"/>
+
+                        <TextBlock Text="Nama instalasi" Style="{StaticResource LabelField}"/>
+                        <TextBox x:Name="InputNama" Style="{StaticResource InputTeks}" TextChanged="Input_Berubah"/>
+                        <TextBlock x:Name="GalatNama" Style="{StaticResource PesanGalat}"/>
+
+                        <TextBlock Text="Alamat" Style="{StaticResource LabelField}" Margin="0,12,0,0"/>
+                        <TextBox x:Name="InputAlamat" Style="{StaticResource InputTeks}"/>
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Latitude" Style="{StaticResource LabelField}"/>
+                                <TextBox x:Name="InputLat" Style="{StaticResource InputAngka}" TextChanged="Input_Berubah"/>
+                                <TextBlock x:Name="GalatLat" Style="{StaticResource PesanGalat}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Longitude" Style="{StaticResource LabelField}"/>
+                                <TextBox x:Name="InputLon" Style="{StaticResource InputAngka}" TextChanged="Input_Berubah"/>
+                                <TextBlock x:Name="GalatLon" Style="{StaticResource PesanGalat}"/>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="Koordinat menentukan data radiasi dari Open-Meteo"
+                                   Style="{StaticResource LabelKecil}" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Spesifikasi Panel -->
+                <Border Style="{StaticResource GayaKartu}" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="Spesifikasi Panel" Style="{StaticResource JudulSeksi}"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Kapasitas" Style="{StaticResource LabelField}"/>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="kWp" Style="{StaticResource Satuan}"/>
+                                    <TextBox x:Name="InputKapasitas" Style="{StaticResource InputAngka}"
+                                             TextChanged="Input_Berubah"/>
+                                </DockPanel>
+                                <TextBlock x:Name="GalatKapasitas" Style="{StaticResource PesanGalat}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Jumlah panel" Style="{StaticResource LabelField}"/>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Right" Text="unit" Style="{StaticResource Satuan}"/>
+                                    <TextBox x:Name="InputJumlah" Style="{StaticResource InputAngka}"
+                                             TextChanged="Input_Berubah"/>
+                                </DockPanel>
+                                <TextBlock x:Name="GalatJumlah" Style="{StaticResource PesanGalat}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="Efisiensi panel" Style="{StaticResource LabelField}" Margin="0,12,0,0"/>
+                        <DockPanel Margin="0,6,0,0">
+                            <TextBlock x:Name="TeksEfisiensi" DockPanel.Dock="Right" Width="48" TextAlignment="Right"
+                                       FontFamily="{StaticResource FontAngka}" FontSize="14" FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                            <Slider x:Name="SliderEfisiensi" Minimum="10" Maximum="25" TickFrequency="1"
+                                    IsSnapToTickEnabled="True" VerticalAlignment="Center"
+                                    ValueChanged="SliderEfisiensi_ValueChanged"/>
+                        </DockPanel>
+                        <Grid Margin="0,2,48,0">
+                            <TextBlock Text="10%" Style="{StaticResource LabelKecil}"/>
+                            <TextBlock Text="25%" Style="{StaticResource LabelKecil}" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Tarif Listrik -->
+                <Border Style="{StaticResource GayaKartu}" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Tarif Listrik" Style="{StaticResource JudulSeksi}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Golongan tarif" Style="{StaticResource LabelField}"/>
+                                <ComboBox x:Name="PilihGolongan" Margin="0,4,0,0" Padding="8,6"
+                                          SelectionChanged="PilihGolongan_SelectionChanged"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Harga per kWh" Style="{StaticResource LabelField}"/>
+                                <DockPanel>
+                                    <TextBlock DockPanel.Dock="Left" Text="Rp" Style="{StaticResource Satuan}"
+                                               Margin="0,4,8,0"/>
+                                    <TextBox x:Name="InputTarif" Style="{StaticResource InputAngka}"
+                                             TextChanged="Input_Berubah"/>
+                                </DockPanel>
+                                <TextBlock x:Name="GalatTarif" Style="{StaticResource PesanGalat}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <Button x:Name="TombolSimpan" Content="Simpan dan Hitung Estimasi"
+                            Style="{StaticResource TombolUtama}" Click="Simpan_Click"/>
+                    <Button Content="Batal" Style="{StaticResource TombolSekunder}" BorderThickness="0"
+                            Margin="10,0,0,0" Click="Batal_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ============ KOLOM KANAN: PRATINJAU ============ -->
+        <Border Grid.Row="1" Grid.Column="2" Style="{StaticResource GayaKartu}" VerticalAlignment="Top">
+            <StackPanel>
+                <TextBlock Text="Pratinjau Estimasi" Style="{StaticResource JudulKartu}"/>
+                <TextBlock Text="Angka diperbarui otomatis saat data diubah"
+                           Style="{StaticResource LabelKecil}" Margin="0,4,0,18"/>
+
+                <TextBlock Text="Produksi harian" Style="{StaticResource LabelKecil}"/>
+                <TextBlock x:Name="PratinjauHarian" Style="{StaticResource AngkaBesar}"/>
+                <Separator Margin="0,10" Background="{StaticResource Garis}"/>
+
+                <TextBlock Text="Penghematan per bulan" Style="{StaticResource LabelKecil}"/>
+                <TextBlock x:Name="PratinjauHemat" Style="{StaticResource AngkaBesar}"/>
+                <Separator Margin="0,10" Background="{StaticResource Garis}"/>
+
+                <TextBlock Text="Reduksi CO₂ per bulan" Style="{StaticResource LabelKecil}"/>
+                <TextBlock x:Name="PratinjauCo2" Style="{StaticResource AngkaBesar}"/>
+
+                <Border Background="{StaticResource AksenMuda}" CornerRadius="6" Padding="12,10" Margin="0,16,0,0">
+                    <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="#78350F"
+                               Text="Asumsi: rata-rata 4,65 jam matahari puncak per hari, performance ratio 0,75, faktor emisi grid Jawa-Bali 0,794 kg CO₂/kWh."/>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

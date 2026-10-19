@@ -1,0 +1,191 @@
+<UserControl x:Class="SunSaver.App.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <Style x:Key="SelAngka" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource FontAngka}"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+        <Style x:Key="HeaderKanan" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TeksRedup}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="0,0,8,8"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Garis}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        </Style>
+        <Style x:Key="HeaderKiri" TargetType="DataGridColumnHeader" BasedOn="{StaticResource HeaderKanan}">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="32,28">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" MinHeight="300"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 1. Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Dashboard Estimasi" Style="{StaticResource JudulHalaman}"/>
+                    <TextBlock Text="Estimasi berdasarkan data Open-Meteo — bukan hasil pengukuran sensor"
+                               Style="{StaticResource LabelKecil}" Margin="0,4,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <ComboBox x:Name="PilihLokasi" Width="190" Padding="8,6" SelectedIndex="0">
+                        <ComboBoxItem Content="Yogyakarta, Indonesia"/>
+                        <ComboBoxItem Content="Semarang, Indonesia"/>
+                        <ComboBoxItem Content="Surabaya, Indonesia"/>
+                    </ComboBox>
+                    <ComboBox Width="150" Padding="8,6" Margin="10,0,0,0" SelectedIndex="0">
+                        <ComboBoxItem Content="7 Hari Terakhir"/>
+                        <ComboBoxItem Content="14 Hari Terakhir"/>
+                        <ComboBoxItem Content="30 Hari Terakhir"/>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+
+            <!-- 2. Kartu ringkasan -->
+            <UniformGrid Grid.Row="1" Columns="4" Margin="-6,0,-6,16">
+                <Border Style="{StaticResource GayaKartu}" Margin="6,0">
+                    <StackPanel>
+                        <TextBlock Text="Estimasi Produksi" Style="{StaticResource LabelKecil}"/>
+                        <TextBlock x:Name="TeksProduksi" Style="{StaticResource AngkaBesar}"/>
+                        <TextBlock Text="7 hari terakhir" Style="{StaticResource LabelKecil}" FontSize="11"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource GayaKartu}" Margin="6,0">
+                    <StackPanel>
+                        <TextBlock Text="Penghematan Biaya" Style="{StaticResource LabelKecil}"/>
+                        <TextBlock x:Name="TeksHemat" Style="{StaticResource AngkaBesar}"/>
+                        <TextBlock x:Name="TeksTarif" Style="{StaticResource LabelKecil}" FontSize="11"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource GayaKartu}" Margin="6,0">
+                    <StackPanel>
+                        <TextBlock Text="Reduksi Emisi" Style="{StaticResource LabelKecil}"/>
+                        <TextBlock x:Name="TeksCo2" Style="{StaticResource AngkaBesar}"/>
+                        <TextBlock Text="faktor emisi grid Jawa-Bali" Style="{StaticResource LabelKecil}" FontSize="11"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource GayaKartu}" Margin="6,0">
+                    <StackPanel>
+                        <TextBlock Text="Setara Pohon" Style="{StaticResource LabelKecil}"/>
+                        <TextBlock x:Name="TeksPohon" Style="{StaticResource AngkaBesar}"/>
+                        <TextBlock Text="penyerapan CO₂ per tahun" Style="{StaticResource LabelKecil}" FontSize="11"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- 3. Grafik (elemen dominan) -->
+            <Border Grid.Row="2" Style="{StaticResource GayaKartu}" Margin="0,0,0,16">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top" Margin="0,0,0,12">
+                        <TextBlock Text="Produksi Harian vs Radiasi Matahari" Style="{StaticResource JudulKartu}"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Rectangle Width="10" Height="10" Fill="{StaticResource Aksen}" RadiusX="2" RadiusY="2"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="Produksi (kWh)" Style="{StaticResource LabelKecil}" Margin="6,0,16,0"/>
+                            <Rectangle Width="14" Height="2" Fill="#52525B" VerticalAlignment="Center"/>
+                            <TextBlock Text="Radiasi (W/m²)" Style="{StaticResource LabelKecil}" Margin="6,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                    <Canvas x:Name="KanvasGrafik" ClipToBounds="True" SizeChanged="KanvasGrafik_SizeChanged"/>
+                </DockPanel>
+            </Border>
+
+            <!-- 4. Tabel + instalasi aktif -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource GayaKartu}">
+                    <StackPanel>
+                        <TextBlock Text="Rincian Harian" Style="{StaticResource JudulKartu}" Margin="0,0,0,12"/>
+                        <DataGrid x:Name="TabelRincian" AutoGenerateColumns="False" IsReadOnly="True"
+                                  HeadersVisibility="Column" GridLinesVisibility="None"
+                                  Background="Transparent" BorderThickness="0" RowBackground="Transparent"
+                                  AlternatingRowBackground="#F4F4F5" CanUserResizeRows="False"
+                                  CanUserReorderColumns="False" SelectionMode="Single" RowHeight="28"
+                                  FontSize="13" Foreground="{StaticResource Teks}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Tanggal" Width="1.3*"
+                                                    HeaderStyle="{StaticResource HeaderKiri}"
+                                                    Binding="{Binding Tanggal, StringFormat='{}{0:ddd, dd MMM}'}"/>
+                                <DataGridTextColumn Header="Radiasi (W/m²)" Width="*"
+                                                    HeaderStyle="{StaticResource HeaderKanan}"
+                                                    ElementStyle="{StaticResource SelAngka}"
+                                                    Binding="{Binding RadiasiWm2, StringFormat={}{0:N0}}"/>
+                                <DataGridTextColumn Header="Suhu (°C)" Width="*"
+                                                    HeaderStyle="{StaticResource HeaderKanan}"
+                                                    ElementStyle="{StaticResource SelAngka}"
+                                                    Binding="{Binding SuhuC, StringFormat={}{0:N1}}"/>
+                                <DataGridTextColumn Header="Produksi (kWh)" Width="*"
+                                                    HeaderStyle="{StaticResource HeaderKanan}"
+                                                    ElementStyle="{StaticResource SelAngka}"
+                                                    Binding="{Binding ProduksiKwh, StringFormat={}{0:N2}}"/>
+                                <DataGridTextColumn Header="Hemat (Rp)" Width="*"
+                                                    HeaderStyle="{StaticResource HeaderKanan}"
+                                                    ElementStyle="{StaticResource SelAngka}"
+                                                    Binding="{Binding HematRp, StringFormat={}{0:N0}}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource GayaKartu}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Text="Instalasi Aktif" Style="{StaticResource JudulKartu}"
+                                   Margin="0,0,0,14"/>
+                        <Button DockPanel.Dock="Bottom" Content="Ubah Data" Style="{StaticResource TombolSekunder}"
+                                HorizontalAlignment="Left" Click="UbahData_Click" Margin="0,14,0,0"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Margin" Value="0,0,0,10"/>
+                                    <Setter Property="FontSize" Value="13"/>
+                                </Style>
+                            </Grid.Resources>
+
+                            <TextBlock Grid.Row="0" Text="Nama" Foreground="{StaticResource TeksRedup}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TeksNama" HorizontalAlignment="Right"
+                                       FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Grid.Row="1" Text="Kapasitas" Foreground="{StaticResource TeksRedup}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="TeksKapasitas" HorizontalAlignment="Right"
+                                       FontFamily="{StaticResource FontAngka}"/>
+                            <TextBlock Grid.Row="2" Text="Efisiensi panel" Foreground="{StaticResource TeksRedup}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="TeksEfisiensi" HorizontalAlignment="Right"
+                                       FontFamily="{StaticResource FontAngka}"/>
+                            <TextBlock Grid.Row="3" Text="Jumlah panel" Foreground="{StaticResource TeksRedup}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" x:Name="TeksJumlahPanel" HorizontalAlignment="Right"
+                                       FontFamily="{StaticResource FontAngka}"/>
+                            <TextBlock Grid.Row="4" Text="Koordinat" Foreground="{StaticResource TeksRedup}"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" x:Name="TeksKoordinat" HorizontalAlignment="Right"
+                                       FontFamily="{StaticResource FontAngka}"/>
+                        </Grid>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

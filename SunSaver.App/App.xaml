@@ -1,0 +1,141 @@
+<Application x:Class="SunSaver.App.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!-- Palet: netral zinc + satu aksen amber (lihat docs/Prompt-Stitch.md) -->
+        <SolidColorBrush x:Key="Latar"      Color="#F4F4F5"/>
+        <SolidColorBrush x:Key="Sidebar"    Color="#18181B"/>
+        <SolidColorBrush x:Key="Kartu"      Color="#FCFCFB"/>
+        <SolidColorBrush x:Key="Garis"      Color="#E4E4E7"/>
+        <SolidColorBrush x:Key="Teks"       Color="#27272A"/>
+        <SolidColorBrush x:Key="TeksRedup"  Color="#71717A"/>
+        <SolidColorBrush x:Key="Aksen"      Color="#B45309"/>
+        <SolidColorBrush x:Key="AksenMuda"  Color="#FEF3C7"/>
+        <SolidColorBrush x:Key="Galat"      Color="#B91C1C"/>
+
+        <FontFamily x:Key="FontAngka">Consolas</FontFamily>
+
+        <Style x:Key="GayaKartu" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource Kartu}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Garis}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="18"/>
+        </Style>
+
+        <Style x:Key="JudulHalaman" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource Teks}"/>
+        </Style>
+
+        <Style x:Key="JudulKartu" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource Teks}"/>
+        </Style>
+
+        <Style x:Key="LabelKecil" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="{StaticResource TeksRedup}"/>
+        </Style>
+
+        <Style x:Key="AngkaBesar" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource FontAngka}"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource Teks}"/>
+            <Setter Property="Margin" Value="0,6,0,4"/>
+        </Style>
+
+        <Style x:Key="InputTeks" TargetType="TextBox">
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Garis}"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Margin" Value="0,4,0,0"/>
+        </Style>
+
+        <Style x:Key="TombolUtama" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource Aksen}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bg" Background="{TemplateBinding Background}" CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#92400E"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="bg" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TombolSekunder" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource Teks}"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bg" Background="{TemplateBinding Background}" CornerRadius="6"
+                                BorderBrush="{StaticResource Garis}" BorderThickness="1"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#F4F4F5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Item navigasi sidebar: RadioButton supaya hanya satu yang terpilih -->
+        <Style x:Key="ItemNavigasi" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="#A1A1AA"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="bg" Background="Transparent" CornerRadius="6" Padding="14,10">
+                            <Grid>
+                                <Border x:Name="penanda" Width="3" HorizontalAlignment="Left"
+                                        Margin="-14,0,0,0" Background="{StaticResource Aksen}"
+                                        CornerRadius="2" Visibility="Collapsed"/>
+                                <ContentPresenter/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#27272A"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="bg" Property="Background" Value="#27272A"/>
+                                <Setter TargetName="penanda" Property="Visibility" Value="Visible"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Application.Resources>
+</Application>
