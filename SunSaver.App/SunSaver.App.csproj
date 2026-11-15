@@ -5,9 +5,28 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <!-- Agar `dotnet build` juga jalan di Linux; .exe tetap hanya bisa dijalankan di Windows. -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <ApplicationVisualStyles>true</ApplicationVisualStyles>
+    <ApplicationDefaultFont>Segoe UI, 9pt</ApplicationDefaultFont>
+    <RootNamespace>SunSaver.App</RootNamespace>
+    <AssemblyName>SunSaver</AssemblyName>
+    <Product>SunSaver</Product>
+    <Version>1.0.0</Version>
+    <!-- Agar `dotnet build` juga jalan di Linux/CI; .exe tetap hanya bisa dijalankan di Windows. -->
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <!-- UI dibangun lewat kode (tanpa Windows Forms Designer), jadi aturan serialisasi designer tidak relevan. -->
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Worksheet 8: koneksi langsung ke PostgreSQL -->
+    <PackageReference Include="Npgsql" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Konfigurasi Supabase (URL + publishable/anon key). Kunci ini aman di klien karena data dilindungi RLS. -->
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>
